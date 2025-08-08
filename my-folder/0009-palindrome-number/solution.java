@@ -1,19 +1,21 @@
-public class Solution {
-    public static boolean isPalindrome(int x) {
-        if (x < 0 || (x % 10 == 0 && x != 0)) {
+class Solution {
+    public boolean isPalindrome(int x) {
+        if (x<0){
             return false;
         }
-
         int reversed = 0;
-        int original = x;
+        int og = x;
+        while (x>0){
+            int lastint = x % 10;
+            reversed = (reversed*10) + lastint;
 
-        while (x > 0) {
-            int digit = x % 10;
-            reversed = reversed * 10 + digit; 
-            
-            x /= 10; 
+            //now remove last int from x
+            x= x/10;
         }
-
-        return original == reversed;
+        if (og == reversed){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
