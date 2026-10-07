@@ -1,43 +1,43 @@
 class RandomizedSet {
-    Map<Integer,Integer> map = new HashMap<>();
+    //0(1) insert, delete and random
+    HashMap<Integer,Integer> map = new HashMap<>();
     List<Integer> arr = new ArrayList<>();
 
     public RandomizedSet() {
-    
+        //we dont really need anything here yet
     }
     
     public boolean insert(int val) {
-        if ( map.containsKey(val)){
+        if (map.containsKey(val)){
             return false;
         }
         arr.add(val);
-        map.put(val, arr.size()-1);
+        map.put(val, arr.size()-1); //array list is size not length
         return true;
     }
     
     public boolean remove(int val) {
-        if (!map.containsKey(val)) {
-            return false;
-        }
-        //now lets remove from the array
-        //but we have to get,switch and then delete
-        //get
-        int i = map.get(val);
+        //remove is a bit tricky
+        //it should remove false if it isnt in the set
+        //we want to get the index of the value we want to remove
+        //we switch the last thing to that index. (update map)
+        //then we delete that from array and map
+        if (!map.containsKey(val)){return false;}
+        int i = map.get(val); //index of thing we want to delete
 
-        //switch (add the end at the position of i)
-        arr.set(i,arr.get( arr.size()-1));
-        //update map
-        map.put(arr.get(i),i);
-        //remove from list
-        arr.remove(arr.size()-1);
-        map.remove(val);
+        arr.set(i, arr.get(arr.size()-1)); //i of the array is now the end value
+        map.put(arr.get(i),i);//switch in map
+
+        arr.remove(arr.size()-1);//delte in both
+        map.remove(val); //delete in both
 
         return true;
+
     }
     
     public int getRandom() {
         Random rand = new Random();
-        return arr.get( rand.nextInt(arr.size()) );
+        return arr.get( rand.nextInt(arr.size()));
     }
 }
 
