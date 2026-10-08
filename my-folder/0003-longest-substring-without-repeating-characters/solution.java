@@ -1,20 +1,18 @@
 class Solution {
     public int lengthOfLongestSubstring(String s) {
-    HashSet<Character> h = new HashSet<>();
-    int lp = 0;
-    int maxL = 0;
+    HashSet<Character> hashset = new HashSet<>();
+    int left = 0;
+    int longestSub = 0;
 
-    for (int rp = 0; rp< s.length(); rp++){
-        //we are running the pushing pattern 
-        //now what is the locgic that will accept or keep the window pushing? 
-        //if the set contains the next char then lets erase one from the back. and we can add to the left pointer. otherwise lets push the right one
-        while (h.contains(s.charAt(rp))) {
-            h.remove(s.charAt(lp));
-            lp++;
+    for (int right = 0; right< s.length(); right++){
+        //we keep moving like the other window problem. as long as set contains the character we remove the left pointer from the set
+        while (hashset.contains(s.charAt(right))) {
+            hashset.remove(s.charAt(left));
+            left++;
         }
-        h.add(s.charAt(rp));
-        maxL = Math.max(maxL, rp - lp + 1);
+        hashset.add(s.charAt(right));
+        longestSub = Math.max(longestSub, right - left + 1);
     }
-    return maxL;
+    return longestSub;
     }
 }
