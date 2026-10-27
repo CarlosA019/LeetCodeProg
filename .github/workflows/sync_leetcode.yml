@@ -1,9 +1,13 @@
+
 name: Sync Leetcode
 
 on:
   workflow_dispatch:
   schedule:
     - cron: "*/5 * * * *"
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -20,3 +24,49 @@ jobs:
           destination-folder: my-folder
           verbose: true
           commit-header: "[LeetCode Sync]"
+
+      - name: Update LeetCode count
+        run: |
+          git pull --ff-only
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          folder = Path("my-folder")
+
+          count = sum(
+              1 for path in folder.iterdir()
+              if path.is_dir() and re.match(r"^\d+-", path.name)
+          ) if folder.exists() else 0
+
+          readme = Path("README.md")
+          text = readme.read_text() if readme.exists() else "# LeetCodeProg\n"
+
+          section = (
+              "## Progress\n\n"
+              f"**Problems saved: {count}**\n\n"
+              "Counted automatically from saved solution folders.\n"
+          )
+
+          if "## Progress" in text:
+              text = re.sub(
+                  r"(?ms)^## Progress\n.*?(?=^## |\Z)",
+                  section + "\n",
+                  text
+              )
+          else:
+              text = text.rstrip() + "\n\n" + section
+
+          readme.write_text(text)
+          print(f"Found {count} saved LeetCode problems.")
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add README.md
+          if ! git diff --cached --quiet; then
+            git commit -m "Update LeetCode progress count"
+            git push
+          fi
