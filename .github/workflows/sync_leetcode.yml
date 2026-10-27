@@ -9,12 +9,21 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: leetcode-sync
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Sync
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Sync LeetCode solutions
         uses: joshcai/leetcode-sync@v1.7
         with:
           github-token: ${{ github.token }}
@@ -26,8 +35,10 @@ jobs:
           commit-header: "[LeetCode Sync]"
 
       - name: Update LeetCode count
+        shell: bash
         run: |
-          git pull --ff-only
+          git fetch origin main
+          git reset --hard origin/main
 
           python3 - <<'PY'
           from pathlib import Path
@@ -66,7 +77,10 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add README.md
+
           if ! git diff --cached --quiet; then
             git commit -m "Update LeetCode progress count"
-            git push
+            git push origin HEAD:main
+          else
+            echo "LeetCode count is already up to date."
           fi
