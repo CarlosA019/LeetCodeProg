@@ -17,18 +17,14 @@ class Solution {
 
         // loop until both lists are empty and no carry is left
         while (l1 != null || l2 != null || carry != 0) {
-            int l1num;
+            int l1num = 0;
             if (l1 != null) {
                 l1num = l1.val;
-            } else {
-                l1num = 0;
             }
 
-            int l2num;
+            int l2num = 0;
             if (l2 != null) {
                 l2num = l2.val;
-            } else {
-                l2num = 0;
             }
 
             int sum = l1num + l2num + carry; //getting the sum of that one digit
