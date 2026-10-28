@@ -19,7 +19,7 @@ class Solution {
         while (l1 != null || l2 != null || carry != 0) {
             int l1num = 0;
             if (l1 != null) {
-                l1num = l1.val;
+                l1num = l1.val;//making sure it isnt null
             }
 
             int l2num = 0;
@@ -27,11 +27,11 @@ class Solution {
                 l2num = l2.val;
             }
 
-            int sum = l1num + l2num + carry; //getting the sum of that one digit
-            carry = sum / 10;              // carry for the next step
-            ListNode newNode = new ListNode(sum % 10); // digit for this step
+            int sum = l1num + l2num + carry; 
+            carry = sum / 10;
+            ListNode newNode = new ListNode(sum % 10);
 
-            // if first node, set head and tail
+            // if its the first node, set head and tail
             if (head == null) {
                 head = newNode;
                 tail = newNode;
