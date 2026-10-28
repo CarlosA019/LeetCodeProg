@@ -35,7 +35,7 @@ class Solution {
             carry = sum / 10;              // carry for the next step
             ListNode newNode = new ListNode(sum % 10); // digit for this step
 
-            // if this is the first node, set head and tail
+            // if first node, set head and tail
             if (head == null) {
                 head = newNode;
                 tail = newNode;
@@ -56,4 +56,3 @@ class Solution {
         return head;
     }
 }
-
